@@ -23,6 +23,7 @@ BIN_DIR      := bin/$(MODE)
 
 SOURCE_FILES := $(wildcard *.cpp)
 OBJ_FILES    := $(SOURCE_FILES:%.cpp=$(OBJ_DIR)/%.o)
+RES_FILES    := $(addprefix $(BIN_DIR)/,square_small.bmp)
 
 .PHONY: all
 all: snake
@@ -32,17 +33,19 @@ $(OBJ_DIR)/%.o : %.cpp | $(OBJ_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 .PHONY: snake
-snake: $(OBJ_FILES) | $(BIN_DIR)
+snake: $(OBJ_FILES) | $(BIN_DIR) $(RES_FILES)
 	$(LD) $(LDFLAGS) -o $(BIN_DIR)/$@ $^ $(LIBS)
-	
 
 $(OBJ_DIR):
 	@echo "create obj dir"
 	mkdir -p $@
-	
+
 $(BIN_DIR):
 	mkdir -p $@
-	
+
+$(RES_FILES):
+	@cp $(notdir $@) $(BIN_DIR)/
+
 .PHONY:	
 clean:
 	-rm $(OBJ_DIR)/*.o
